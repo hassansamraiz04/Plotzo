@@ -1,0 +1,56 @@
+// footer.scss
+
+.footer-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+}
+
+.footer {
+    border-top: 1px solid #a9a9a9;
+    background-color: #f8f8f8;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    
+    // Center content vertically
+    display: flex;
+    justify-content: space-between;
+    
+    
+    // Adjust spacing between items
+    & > div {
+      margin-bottom: 20px;
+    }
+  
+    // Style headings
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+    .follow-footer{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      div{
+        align-self: flex-start;
+      }
+    }
+    // Style links
+    a {
+      text-decoration: none;
+      &:hover {
+        color: #fece51
+      }
+    }
+  
+    // Style paragraphs
+    p {
+      margin: 5px 0;
+    }
+  }
+
+  
