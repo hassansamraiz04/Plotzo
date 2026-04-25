@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import { useNavigate } from "react-router-dom";
 import UploadWidget from "../../components/UploadWidget/UploadWidget";
-import { userData } from "../../lib/dummydata";
+
 
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);

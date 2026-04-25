@@ -17,6 +17,7 @@ function Navbar() {
     <nav>
       <div className="left">
         <a href="/" className="logo">
+        
           <img src="/logo.png" alt="" />
           <span>Plotzo</span>
         </a>
@@ -44,6 +45,7 @@ function Navbar() {
           </>
         )}
         <div className="menuIcon">
+
           <img
             src="/menu.png"
             alt=""

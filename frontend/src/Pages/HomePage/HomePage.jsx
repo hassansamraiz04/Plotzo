@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import SearchBar from "../../components/searchBar/SearchBar";
+
 import "./HomePage.scss";
 //import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
