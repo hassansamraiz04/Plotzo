@@ -1,0 +1,50 @@
+@import "../../responsive.scss";
+//@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+.listPage {
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+
+  .filter{
+    width: 95%;
+  }
+  
+  .trigger-button {
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+
+    i {
+        font-size: 1.2em;
+      }
+    }
+  .listContainer {
+    flex: 3;
+    height: 100%;
+    width: 60%;
+
+    .wrapper{
+      height: 100%;
+      padding-right: 50px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 50px;
+      overflow-y: scroll;
+      padding-bottom: 50px;
+    }
+  }
+  .mapContainer {
+    flex: 2;
+    height: 140%;
+    background-color: #fcf5f3;
+    width: 40%;
+
+    @include md{
+      display: none;
+    }
+  }
+}
