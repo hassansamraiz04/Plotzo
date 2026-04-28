@@ -5,7 +5,6 @@ import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { listData } from "../../lib/dummydata";
 import Footer from "../../components/Footer/Footer";
 import { AuthContext } from "../../context/AuthContext";
-
 function HomePage() {
   const { currentUser } = useContext(AuthContext);
   console.log(listData);

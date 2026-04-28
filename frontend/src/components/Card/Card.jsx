@@ -9,6 +9,7 @@ function Card({ item }) {
       receiverId: item.userId,
     };
 
+    
     axios
       .post("http://localhost:8800/api/chats", postData, {
         withCredentials: true,

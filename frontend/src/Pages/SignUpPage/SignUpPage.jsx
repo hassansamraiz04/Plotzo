@@ -7,7 +7,6 @@ import apiRequest from "../../lib/apiRequest";
 function SignUpPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

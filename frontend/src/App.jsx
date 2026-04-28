@@ -3,18 +3,13 @@ import { Layout, RequireAuth } from "./Pages/Layout/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { listData, singlePostData } from "./lib/dummydata";
 import ListPage from "./Pages/ListPage/ListPage";
-
 import UploadWidget from "./components/UploadWidget/UploadWidget";
-
 import SingleListingPage from "./Pages/SingleListingPage/SingleListingPage";
 import AboutPage from "./Pages/AboutPage/About";
-
 import ContactPage from "./Pages/ContactPage/ContactPage";
 import Login from "./Pages/Login/Login";
-
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
-
 import ProfileUpdatePage from "./Pages/UpdateProfilePage/UpdateProfilePage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
 import NewPostPage from "./Pages/newPostPage/newPostPage";

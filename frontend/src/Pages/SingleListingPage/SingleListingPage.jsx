@@ -12,7 +12,6 @@ import axios from 'axios';
 function SingleListingPage() {
   //const post = singleData; //useLoaderData();
   const post = useLoaderData();
-  
   const [saved, setSaved] = useState(post.isSaved);
   console.log(saved);
   const [predictedPrice, setPredictedPrice] = useState(0);
