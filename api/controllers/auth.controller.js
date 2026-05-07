@@ -7,6 +7,9 @@ export const register = async (req, res) => {
   console.log(req.body);
   const { username, email, password } = req.body;
 
+  
+
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log(hashedPassword);
@@ -26,7 +29,7 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Failed to create user!" });
   }
 };
-
+// Login function to authenticate user and generate JWT token
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -68,7 +71,7 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Failed to login!" });
   }
 };
-
+// Logout function to clear the JWT token cookie
 export const logout = (req, res) => {
   res.clearCookie("token").status(200).json({ message: "Logout Successful" });
 };
