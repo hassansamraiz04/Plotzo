@@ -6,6 +6,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 40px;
 
 }
 
@@ -13,12 +14,14 @@
     border-top: 1px solid #a9a9a9;
     background-color: #f8f8f8;
     padding: 20px;
-    text-align: center;
+    text-align: left;
     width: 100%;
     
     // Center content vertically
     display: flex;
     justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
     
     
     // Adjust spacing between items
@@ -51,6 +54,12 @@
     p {
       margin: 5px 0;
     }
+  }
+
+  .copyright {
+    padding: 12px 8px 24px;
+    color: #666;
+    font-size: 14px;
   }
 
   

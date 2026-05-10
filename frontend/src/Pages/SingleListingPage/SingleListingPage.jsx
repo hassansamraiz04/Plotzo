@@ -6,44 +6,112 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
-import { singleData } from "../../lib/dummydata";
-import axios from 'axios';
+import Toast from "../../components/Toast/Toast";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import { getUserId, isSeller } from "../../lib/authz";
 
 function SingleListingPage() {
-  //const post = singleData; //useLoaderData();
   const post = useLoaderData();
   const [saved, setSaved] = useState(post.isSaved);
-  console.log(saved);
-  const [predictedPrice, setPredictedPrice] = useState(0);
+  const [predictedPrice, setPredictedPrice] = useState(null);
+  const [predictionError, setPredictionError] = useState("");
+  const [predicting, setPredicting] = useState(false);
+  const [targetLang, setTargetLang] = useState("en");
+  const [translatedDesc, setTranslatedDesc] = useState("");
+  const [translating, setTranslating] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [actionSuccess, setActionSuccess] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const currentUserId = getUserId(currentUser);
+  const listingOwnerId = post?.user?.id || post?.userId;
+  const isOwnerSeller =
+    isSeller(currentUser) &&
+    currentUserId &&
+    listingOwnerId &&
+    currentUserId === listingOwnerId;
 
   useEffect(() => {
     const postDataToPredictEndpoint = async () => {
+      setPredicting(true);
+      setPredictionError("");
       try {
-        const response = await axios.post('http://localhost:8900/predict', post);
-
-        setPredictedPrice((response.data['predicted_price']*0.0036).toFixed(2)); // Handle response data as needed
+        const response = await apiRequest.post("/ml/predict", {
+          bedroom: post.bedroom,
+          bathroom: post.bathroom,
+          size: post.postDetail?.size,
+          latitude: Number(post.latitude),
+          longitude: Number(post.longitude),
+          type: post.type,
+          property: post.property,
+          city: post.city,
+        });
+        setPredictedPrice(Math.round(response.data.predicted_price || 0));
       } catch (error) {
-        console.error('Error:', error);
-        // Handle error here
+        setPredictionError("Could not load AI prediction");
+      } finally {
+        setPredicting(false);
       }
     };
 
     postDataToPredictEndpoint();
-  }, []);
+  }, [post]);
+
+  useEffect(() => {
+    const run = async () => {
+      if (targetLang === "en") {
+        setTranslatedDesc("");
+        return;
+      }
+      setTranslating(true);
+      try {
+        const plain = DOMPurify.sanitize(post.postDetail?.desc || "", {
+          ALLOWED_TAGS: [],
+          ALLOWED_ATTR: [],
+        });
+        const res = await apiRequest.post("/translate", {
+          text: plain,
+          sourceLang: "en",
+          targetLang,
+        });
+        setTranslatedDesc(res.data.translated || "");
+      } catch {
+        setTranslatedDesc("Translation unavailable right now.");
+      } finally {
+        setTranslating(false);
+      }
+    };
+    run();
+  }, [post, targetLang]);
 
   const handleSave = async () => {
     if (!currentUser) {
       navigate("/login");
+      return;
     }
-    // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
     setSaved((prev) => !prev);
     try {
       await apiRequest.post("/users/save", { postId: post.id });
     } catch (err) {
       console.log(err);
       setSaved((prev) => !prev);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!isOwnerSeller) return;
+    setDeleteLoading(true);
+    try {
+      await apiRequest.delete(`/posts/${post.id}`);
+      setActionSuccess("Listing deleted successfully");
+      navigate("/profile");
+    } catch (err) {
+      setActionError(err?.response?.data?.message || "Failed to delete listing");
+    } finally {
+      setDeleteLoading(false);
+      setDeleteModalOpen(false);
     }
   };
 
@@ -60,15 +128,18 @@ function SingleListingPage() {
                   <img src="/pin.png" alt="" />
                   <span>{post.address}</span>
                 </div>
-                <div className="price">$ {post.price} &nbsp;&nbsp;&nbsp; 
-                 {(post.price > predictedPrice) && <i className="bi bi-arrow-up-circle-fill tooltip" onMouseEnter={() => setIsHovered(true)}onMouseLeave={() => setIsHovered(false)}><div className="tooltiptext">
-                    Price of this property is higher than our estimated price of $ {predictedPrice}.
-                  </div></i>}
-                {(post.price <= predictedPrice) && <i className="bi bi-arrow-down-circle-fill tooltip" onMouseEnter={() => setIsHovered(true)}onMouseLeave={() => setIsHovered(false)}><div className="tooltiptext">
-                  Price of this property is lower than our estimated price of $ {predictedPrice}.
-                  </div></i>}
+                <div className="price">
+                PKR {post.price.toLocaleString()}
                 </div>
-                
+                <div>
+                  {predicting && <small>Predicting price...</small>}
+                  {!predicting && predictionError && <small>{predictionError}</small>}
+                  {!predicting && predictedPrice && (
+                    <small>
+                      AI estimate: PKR {predictedPrice.toLocaleString()} ({post.price > predictedPrice ? "listed above" : "listed below"} estimate)
+                    </small>
+                  )}
+                </div>
               </div>
               <div className="user">
                 <img src={post.user.avatar} alt="" />
@@ -81,6 +152,20 @@ function SingleListingPage() {
                 __html: DOMPurify.sanitize(post.postDetail.desc),
               }}
             ></div>
+            <div style={{ marginTop: 16 }}>
+              <label htmlFor="lang">Description language: </label>
+              <select id="lang" value={targetLang} onChange={(e) => setTargetLang(e.target.value)}>
+                <option value="en">English</option>
+                <option value="ur">Urdu</option>
+                <option value="es">Spanish</option>
+                <option value="ar">Arabic</option>
+              </select>
+              {targetLang !== "en" && (
+                <p style={{ marginTop: 8 }}>
+                  {translating ? "Translating..." : translatedDesc}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -178,10 +263,15 @@ function SingleListingPage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
-              <img src="/chat.png" alt="" />
-              Send a Message
-            </button>
+          <button onClick={() => {
+  if (!currentUser) { navigate("/login"); return; }
+  apiRequest.post("/chats", { receiverId: post.user.id })
+    .then(() => navigate("/profile"))
+    .catch(err => console.log(err));
+}}>
+  <img src="/chat.png" alt="" />
+  Send a Message
+</button>
             <button
               onClick={handleSave}
               style={{
@@ -191,9 +281,30 @@ function SingleListingPage() {
               <img src="/save.png" alt="" />
               {saved ? "Place Saved" : "Save the Place"}
             </button>
+            {isOwnerSeller && (
+              <>
+                <button onClick={() => navigate(`/edit/${post.id}`)}>Edit Listing</button>
+                <button onClick={() => setDeleteModalOpen(true)} disabled={deleteLoading}>
+                  {deleteLoading ? "Deleting..." : "Delete Listing"}
+                </button>
+              </>
+            )}
           </div>
+          {actionError ? <Toast message={actionError} type="error" /> : null}
+          {actionSuccess ? <Toast message={actionSuccess} type="success" /> : null}
         </div>
       </div>
+      {deleteModalOpen && (
+        <ConfirmModal
+          title="Delete listing"
+          message="This action cannot be undone. Do you want to permanently delete this listing?"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteModalOpen(false)}
+          loading={deleteLoading}
+        />
+      )}
     </div>
   );
 }

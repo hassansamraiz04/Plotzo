@@ -1,18 +1,23 @@
+import "../InfoPage.scss";
+
 function AboutPage(){
     return (
-        <div className="about-page">
+        <div className="infoPage">
           <div className="about-content">
-            <br/>
-            <h2>About Us</h2>
-            <br/>
+            <h2>About Plotzo</h2>
             <p>
-              Welcome to Plotzo: a Real Estate Marketplace! We are dedicated to providing the best platform for buying, selling, and renting properties.
+              Plotzo is a modern real estate marketplace built to connect buyers,
+              tenants, and verified sellers on one secure platform.
             </p>
             <p>
-              Our mission is to connect buyers, sellers, and renters, making the process of finding the perfect property as seamless and enjoyable as possible.
+              Our mission is to make property discovery and communication simple,
+              transparent, and fast with role-based controls, intelligent search,
+              and instant chat.
             </p>
             <p>
-              Whether you're looking for your dream home, an investment property, or a place to rent, we've got you covered. Our team of experts is here to assist you every step of the way.
+              Whether you are buying, renting, or listing a property, Plotzo helps
+              you compare listings, save favorites, and reach the right owner with
+              confidence.
             </p>
           </div>
         </div>

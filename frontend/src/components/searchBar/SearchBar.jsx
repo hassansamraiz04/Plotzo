@@ -1,15 +1,18 @@
 import { useState } from "react";
 import "./searchBar.scss";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const types = ["buy", "rent"];
 
 function SearchBar() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState({
     type: "buy",
     city: "",
     minPrice: 0,
     maxPrice: 0,
+    bedroom: "",
+    bathroom: "",
   });
 
   const switchType = (val) => {
@@ -18,6 +21,15 @@ function SearchBar() {
 
   const handleChange = (e) => {
     setQuery((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const cleaned = Object.fromEntries(
+      Object.entries(query).filter(([, value]) => String(value).trim() !== "")
+    );
+    const params = new URLSearchParams(cleaned).toString();
+    navigate(`/listings?${params}`);
   };
 
   return (
@@ -33,7 +45,7 @@ function SearchBar() {
           </button>
         ))}
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="city"
@@ -56,14 +68,24 @@ function SearchBar() {
           placeholder="Max Price"
           onChange={handleChange}
         />
+        <input
+          type="number"
+          name="bedroom"
+          min={0}
+          placeholder="Bedrooms"
+          onChange={handleChange}
+        />
+        <input
+          type="number"
+          name="bathroom"
+          min={0}
+          placeholder="Bathrooms"
+          onChange={handleChange}
+        />
         
-        <Link
-          to={`/listings?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`}
-        >
-          <button>
-            <img src="/search.png" alt="" />
-          </button>
-        </Link>
+        <button type="submit" aria-label="Search listings">
+          <img src="/search.png" alt="" />
+        </button>
       </form>
     </div>
   );

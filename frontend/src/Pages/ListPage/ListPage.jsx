@@ -3,9 +3,10 @@ import Filter from "../../components/Filter/Filter";
 import Card from "../../components/Card/Card";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import Map from "../../components/Map/Map";
-import { listData } from "../../lib/dummydata";
 import { Await, useLoaderData } from "react-router-dom";
 import { Suspense, useState } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import EmptyState from "../../components/EmptyState/EmptyState";
 
 function ListPage() {
   const data = useLoaderData();
@@ -46,17 +47,26 @@ function ListPage() {
                     }
                     </Await>
                 </Suspense> */}
-                <Suspense fallback={<p>Loading...</p>}>
+                <Suspense fallback={<LoadingSpinner label="Loading listings..." />}>
                     <Await
                     resolve={data.postResponse}
                     errorElement={<p>Error loading posts!</p>}
                     >
                     {(postResponse) =>
-                        postResponse.data.map((post) => (
-                            toggleView?
-                            (<Card key={post.id} item={post} />)
-                            :(<VerticalCard key={post.id} item={post} />)
-                        ))
+                        postResponse.data.length ? (
+                          postResponse.data.map((post) =>
+                            toggleView ? (
+                              <Card key={post.id} item={post} />
+                            ) : (
+                              <VerticalCard key={post.id} item={post} />
+                            )
+                          )
+                        ) : (
+                          <EmptyState
+                            title="No listings found"
+                            subtitle="Try changing your filters or search criteria."
+                          />
+                        )
                     }
                     </Await>
                 </Suspense>
@@ -71,7 +81,7 @@ function ListPage() {
                     {(postResponse) => <Map items={data} />}
                 </Await>
                 </Suspense> */}
-                <Suspense fallback={<p>Loading...</p>}>
+                <Suspense fallback={<LoadingSpinner label="Loading map..." />}>
                     <Await
                         resolve={data.postResponse}
                         errorElement={<p>Error loading posts!</p>}

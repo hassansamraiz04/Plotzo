@@ -1,76 +1,118 @@
 .newPostPage {
-    height: 100%;
-    display: flex;
-  
-    .formContainer {
-      flex: 3;
-      overflow: scroll;
-  
-      .wrapper {
-        margin: 30px 50px 100px 0px;
-  
-        form {
+  height: 100%;
+  display: flex;
+
+  .formContainer {
+    flex: 3;
+    overflow: auto;
+
+    .wrapper {
+      margin: 24px 40px 60px 0;
+
+      form {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-top: 16px;
+
+        .item {
+          width: 31%;
           display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 20px;
-  
-          .item {
-            width: 30%;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-  
-            label {
-            }
-  
-            input {
-              padding: 20px;
-              border-radius: 5px;
-              border: 1px solid gray;
-            }
-  
-            select {
-              padding: 19px;
-            }
-  
-            &.description {
-              width: 100%;
-              height: 320px;
-  
-              .quill > .ql-container > .ql-editor{
-                height: 200px;
-                font-size: 16px;
-              }
+          flex-direction: column;
+          gap: 6px;
+
+          input,
+          select {
+            padding: 14px 12px;
+            border-radius: 8px;
+            border: 1px solid #bbb;
+            font-size: 14px;
+          }
+
+          &.description {
+            width: 100%;
+            min-height: 300px;
+
+            .quill > .ql-container > .ql-editor {
+              height: 180px;
+              font-size: 16px;
             }
           }
-          .sendButton {
-            width: 30%;
-            border-radius: 5px;
-            border: none;
-            background-color: teal;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-          }
+        }
+
+        .sendButton {
+          width: 31%;
+          border-radius: 8px;
+          border: none;
+          background-color: teal;
+          color: #fff;
+          font-weight: 700;
+          cursor: pointer;
+          min-height: 48px;
+        }
+
+        .sendButton:disabled {
+          cursor: not-allowed;
+          opacity: 0.65;
         }
       }
     }
-  
-    .sideContainer {
-      flex: 2;
-      background-color: #fcf5f3;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-  
-      img {
-        width: 50%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 5px;
-      }
+  }
+
+  .sideContainer {
+    flex: 2;
+    background-color: #fcf5f3;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+
+    img {
+      width: 72%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
     }
   }
+}
+
+.unauthorizedInline {
+  .wrapper {
+    .unauthorizedLink {
+      display: inline-block;
+      margin-top: 12px;
+      color: #196e56;
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .newPostPage {
+    flex-direction: column-reverse;
+
+    .formContainer .wrapper {
+      margin: 20px 0 40px 0;
+
+      form .item {
+        width: 48%;
+      }
+    }
+
+    .sideContainer img {
+      width: 44%;
+    }
+  }
+}
+
+@media (max-width: 738px) {
+  .newPostPage .formContainer .wrapper form {
+    .item,
+    .sendButton {
+      width: 100%;
+    }
+  }
+}

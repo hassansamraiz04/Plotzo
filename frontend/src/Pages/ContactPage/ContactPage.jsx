@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import './ContactPage.scss'
+import Toast from "../../components/Toast/Toast";
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     query: ''
   });
+  const [toast, setToast] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,9 +19,7 @@ const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here (e.g., send data to backend)
-    console.log(formData);
-    // Clear form fields after submission
+    setToast("Thanks! Your message has been recorded.");
     setFormData({
       name: '',
       email: '',
@@ -47,6 +47,7 @@ const ContactPage = () => {
           <textarea id="query" placeholder='Query' name="query" value={formData.query} onChange={handleChange} required></textarea>
           <button type="submit">Submit</button>
         </form>
+        {toast ? <Toast message={toast} type="success" /> : null}
       </div>
     </div>
   );

@@ -1,13 +1,11 @@
-import { useContext } from "react";
 import SearchBar from "../../components/searchBar/SearchBar";
 import "./HomePage.scss";
+//import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import VerticalCard from "../../components/VerticalCard/VerticalCard";
 import { listData } from "../../lib/dummydata";
 import Footer from "../../components/Footer/Footer";
-import { AuthContext } from "../../context/AuthContext";
+
 function HomePage() {
-  const { currentUser } = useContext(AuthContext);
-  console.log(listData);
   return (
     <div className="home-wrapper">
       <div className="homePage">
@@ -61,7 +59,7 @@ function HomePage() {
         <br />
         {listData.map((list) => {
           if (list.type === "Sale") {
-            return <VerticalCard item={list} />;
+            return <VerticalCard key={list.id} item={list} />;
           }
         })}
       </div>
@@ -72,7 +70,7 @@ function HomePage() {
         <br />
         {listData.map((list) => {
           if (list.type === "Rent") {
-            return <VerticalCard item={list} />;
+            return <VerticalCard key={list.id} item={list} />;
           }
         })}
       </div>

@@ -20,8 +20,6 @@ function Login() {
 
     const username = formData.get("username");
     const password = formData.get("password");
-    const message = "Username: ${username}\nPassword: ${password}";
-    alert("Username: " + username + "\nPassword: " + password);
     try {
       const res = await apiRequest.post("/auth/login", {
         username,
@@ -32,7 +30,7 @@ function Login() {
 
       navigate("/");
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err?.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +60,6 @@ function Login() {
         </form>
       </div>
       <div className="imgContainer">
-        
         <img src="/bg.png" alt="" />
       </div>
     </div>

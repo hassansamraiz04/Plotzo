@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { isSeller } from "../../lib/authz";
 
 function Layout() {
   return (
@@ -21,18 +22,18 @@ function RequireAuth() {
   const { currentUser } = useContext(AuthContext);
 
   if (!currentUser) return <Navigate to="/login" />;
-  else {
-    return (
-      <div className="layout">
-        <div className="navbar">
-          <Navbar />
-        </div>
-        <div className="content">
-          <Outlet />
-        </div>
-      </div>
-    );
-  }
+  return <Outlet />;
 }
 
-export  { Layout, RequireAuth };
+function RequireSeller() {
+  const { currentUser } = useContext(AuthContext);
+
+  if (!currentUser) return <Navigate to="/login" />;
+  if (!isSeller(currentUser)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <Outlet />;
+}
+
+export { Layout, RequireAuth, RequireSeller };

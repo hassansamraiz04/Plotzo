@@ -76,7 +76,7 @@
       gap: 20px;
 
       .chatMessage {
-        width: 50%;
+        width: 72%;
 
         &.own {
           align-self: flex-end;
@@ -111,6 +111,43 @@
         height: 100%;
         border: none;
         cursor: pointer;
+      }
+    }
+  }
+}
+
+@media (max-width: 738px) {
+  .chat {
+    .messages .message {
+      padding: 12px;
+      gap: 10px;
+
+      p {
+        display: none;
+      }
+    }
+
+    .chatBox {
+      .top {
+        padding: 12px;
+      }
+
+      .center {
+        height: 260px;
+        padding: 12px;
+
+        .chatMessage {
+          width: 90%;
+        }
+      }
+
+      .bottom {
+        height: 54px;
+
+        textarea {
+          padding: 10px;
+          font-size: 14px;
+        }
       }
     }
   }

@@ -5,6 +5,7 @@ import apiRequest from "../../lib/apiRequest";
 import { SocketContext } from "../../context/SocketContext";
 import { useNotificationStore } from "../../lib/notficationStore";
 import { format } from "timeago.js";
+import EmptyState from "../EmptyState/EmptyState";
 
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
@@ -77,6 +78,12 @@ function Chat({ chats }) {
     <div className="chat">
       <div className="messages">
         <h1>Messages</h1>
+        {!chats?.length && (
+          <EmptyState
+            title="No messages yet"
+            subtitle="Start a conversation from a listing page."
+          />
+        )}
         {chats?.map((c) =>
           c.receiver ? (
             <div
@@ -129,7 +136,7 @@ function Chat({ chats }) {
             <div ref={messageEndRef}></div>
           </div>
           <form onSubmit={handleSubmit} className="bottom">
-            <textarea name="text"></textarea>
+            <textarea name="text" placeholder="Type your message..." />
             <button>Send</button>
           </form>
         </div>

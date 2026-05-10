@@ -33,7 +33,7 @@
     display: flex;
     justify-content: space-between;
     height: 64px;
-    gap: 5px;
+    gap: 6px;
 
     @include sm {
       flex-direction: column;
@@ -43,30 +43,18 @@
     input {
       border: none;
       padding: 0px 10px;
-      width: 200px;
+      width: 160px;
 
       @include lg {
         padding: 0px 5px;
-
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: 140px;
-        }
+        width: 130px;
       }
       @include md {
-        width: 200px;
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: 200px;
-        }
+        width: 140px;
       }
 
       @include sm{
         width: auto;
-        &:nth-child(2),
-        &:nth-child(3) {
-          width: auto;
-        }
         padding: 20px;
         border: 1px solid #999;
       }

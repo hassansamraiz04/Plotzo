@@ -11,6 +11,10 @@ function Filter() {
     minPrice: searchParams.get("minPrice") || "",
     maxPrice: searchParams.get("maxPrice") || "",
     bedroom: searchParams.get("bedroom") || "",
+    bathroom: searchParams.get("bathroom") || "",
+    minArea: searchParams.get("minArea") || "",
+    maxArea: searchParams.get("maxArea") || "",
+    furnished: searchParams.get("furnished") || "",
     sortBy: searchParams.get("sortBy") || "",
   });
 
@@ -22,7 +26,10 @@ function Filter() {
   };
 
   const handleFilter = () => {
-    setSearchParams(query);
+    const cleaned = Object.fromEntries(
+      Object.entries(query).filter(([, value]) => String(value).trim() !== "")
+    );
+    setSearchParams(cleaned);
   };
 
   return (
@@ -39,7 +46,7 @@ function Filter() {
             name="city"
             placeholder="City Location"
             onChange={handleChange}
-            defaultValue={query.city}
+            value={query.city}
           />
         </div>
         
@@ -49,12 +56,13 @@ function Filter() {
             name="sortBy"
             id="sortBy"
             onChange={handleChange}
-            defaultValue={query.property}
+            value={query.sortBy}
           >
             <option value="">any</option>
             <option value="priceAsc">Price - Low to high</option>
             <option value="priceDesc">Price - High to low</option>
-            <option value="popularity">Popularity</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
           </select>
         </div>
       </div>
@@ -65,7 +73,7 @@ function Filter() {
             name="type"
             id="type"
             onChange={handleChange}
-            defaultValue={query.type}
+            value={query.type}
           >
             <option value="">any</option>
             <option value="buy">Buy</option>
@@ -78,7 +86,7 @@ function Filter() {
             name="property"
             id="property"
             onChange={handleChange}
-            defaultValue={query.property}
+            value={query.property}
           >
             <option value="">any</option>
             <option value="apartment">Apartment</option>
@@ -95,30 +103,76 @@ function Filter() {
             name="minPrice"
             placeholder="any"
             onChange={handleChange}
-            defaultValue={query.minPrice}
+            value={query.minPrice}
           />
         </div>
         <div className="item">
           <label htmlFor="maxPrice">Max Price</label>
           <input
-            type="text"
+            type="number"
             id="maxPrice"
             name="maxPrice"
             placeholder="any"
             onChange={handleChange}
-            defaultValue={query.maxPrice}
+            value={query.maxPrice}
           />
         </div>
         <div className="item">
           <label htmlFor="bedroom">Bedroom</label>
           <input
-            type="text"
+            type="number"
             id="bedroom"
             name="bedroom"
             placeholder="any"
             onChange={handleChange}
-            defaultValue={query.bedroom}
+            value={query.bedroom}
           />
+        </div>
+        <div className="item">
+          <label htmlFor="bathroom">Bathroom</label>
+          <input
+            type="number"
+            id="bathroom"
+            name="bathroom"
+            placeholder="any"
+            onChange={handleChange}
+            value={query.bathroom}
+          />
+        </div>
+        <div className="item">
+          <label htmlFor="minArea">Min Area</label>
+          <input
+            type="number"
+            id="minArea"
+            name="minArea"
+            placeholder="any"
+            onChange={handleChange}
+            value={query.minArea}
+          />
+        </div>
+        <div className="item">
+          <label htmlFor="maxArea">Max Area</label>
+          <input
+            type="number"
+            id="maxArea"
+            name="maxArea"
+            placeholder="any"
+            onChange={handleChange}
+            value={query.maxArea}
+          />
+        </div>
+        <div className="item">
+          <label htmlFor="furnished">Furnished</label>
+          <select
+            name="furnished"
+            id="furnished"
+            onChange={handleChange}
+            value={query.furnished}
+          >
+            <option value="">any</option>
+            <option value="furnished">Furnished</option>
+            <option value="unfurnished">Unfurnished</option>
+          </select>
         </div>
         <button onClick={handleFilter}>
           <img src="/search.png" alt="" />

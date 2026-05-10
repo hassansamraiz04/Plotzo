@@ -1,5 +1,6 @@
 import prisma from "../prisma/prisma.js";
 import bcrypt from "bcrypt";
+import validator from "validator";
 
 export const getUsers = async (req, res) => {
   try {
@@ -27,7 +28,14 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   const id = req.params.id;
   const tokenUserId = req.userId;
-  const { password, avatar, ...inputs } = req.body;
+  const {
+    password,
+    avatar,
+    username: nextUsername,
+    email: nextEmail,
+    role: _blockedRole,
+    isAdmin: _blockedAdmin,
+  } = req.body ?? {};
 
   if (id !== tokenUserId) {
     return res.status(403).json({ message: "Not Authorized!" });
@@ -36,15 +44,33 @@ export const updateUser = async (req, res) => {
   let updatedPassword = null;
   try {
     if (password) {
+      if (!validator.isLength(String(password), { min: 8, max: 128 })) {
+        return res.status(400).json({ message: "Password must be 8–128 characters" });
+      }
       updatedPassword = await bcrypt.hash(password, 10);
+    }
+
+    const data = {};
+    if (typeof nextUsername === "string" && nextUsername.trim().length >= 3) {
+      data.username = nextUsername.trim();
+    }
+    if (typeof nextEmail === "string") {
+      const norm = validator.normalizeEmail(nextEmail.trim());
+      const email = typeof norm === "string" && norm ? norm : nextEmail.trim();
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "Valid email required" });
+      }
+      data.email = email;
+    }
+    if (avatar !== undefined) {
+      data.avatar = typeof avatar === "string" ? avatar : null;
     }
 
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
-        ...inputs,
+        ...data,
         ...(updatedPassword && { password: updatedPassword }),
-        ...(avatar && { avatar }),
       },
     });
 

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import "./VerticalCard.scss";
 
 function VerticalCard({ item }) {
-    console.log(item)
   return (
     <div className="vertical-card">
       <Link to={`/property/${item.id}`} className="vertical-imageContainer">
@@ -16,7 +15,7 @@ function VerticalCard({ item }) {
           <img src="/pin.png" alt="" />
           <span>{item.address}</span>
         </p>
-        <p className="price">$ {item.price}</p>
+        <p className="price">PKR {Number(item.price || 0).toLocaleString()}</p>
         <div className="bottom">
           <div className="features">
             <div className="feature">

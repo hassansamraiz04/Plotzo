@@ -9,7 +9,6 @@ function Card({ item }) {
       receiverId: item.userId,
     };
 
-    
     axios
       .post("http://localhost:8800/api/chats", postData, {
         withCredentials: true,
@@ -39,7 +38,7 @@ function Card({ item }) {
           <img src="/pin.png" alt="" />
           <span>{item.address}</span>
         </p>
-        <p className="price">$ {item.price}</p>
+        <p className="price">PKR {Number(item.price || 0).toLocaleString()}</p>
         <div className="bottom">
           <div className="features">
             <div className="feature">

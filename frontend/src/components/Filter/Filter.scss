@@ -26,7 +26,7 @@
   
       input,
       select {
-        width: 100px;
+        width: 130px;
         padding: 10px;
         border: 1px solid #e0e0e0;
         border-radius: 5px;
@@ -49,6 +49,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 20px;
+      align-items: end;
   
       button {
         width: 100px;
@@ -62,6 +63,18 @@
           height: 24px;
         }
       }
+    }
+  }
+
+  @include sm {
+    .item input,
+    .item select,
+    .bottom button {
+      width: 100%;
+    }
+
+    .city-filter {
+      width: 100%;
     }
   }
   

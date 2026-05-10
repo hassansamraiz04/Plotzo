@@ -7,6 +7,7 @@ import apiRequest from "../../lib/apiRequest";
 function SignUpPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,18 +19,20 @@ function SignUpPage() {
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
+    const role = formData.get("role");
 
     
     try {
-      const res = await apiRequest.post("/auth/register", {
+      await apiRequest.post("/auth/register", {
         username,
         email,
         password,
+        role,
       });
 
       navigate("/login");
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err?.response?.data?.message || "Registration failed");
     } finally {
       setIsLoading(false);
     }
@@ -42,13 +45,16 @@ function SignUpPage() {
           <input name="username" type="text" placeholder="Username" />
           <input name="email" type="text" placeholder="Email" />
           <input name="password" type="password" placeholder="Password" />
+          <select name="role" defaultValue="buyer">
+            <option value="buyer">Buyer</option>
+            <option value="seller">Seller</option>
+          </select>
           <button disabled={isLoading}>Register</button>
           {error && <span>{error}</span>}
           <Link to="/login">Do you have an account?</Link>
         </form>
       </div>
       <div className="imgContainer">
-        
         <img src="/bg.png" alt="" />
       </div>
     </div>

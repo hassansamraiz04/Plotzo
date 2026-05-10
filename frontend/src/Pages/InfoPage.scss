@@ -1,0 +1,23 @@
+.infoPage {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 28px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: #fff;
+
+  h1,
+  h2 {
+    margin-bottom: 12px;
+  }
+
+  p,
+  li {
+    color: #4d4d4d;
+    line-height: 1.65;
+  }
+
+  ul {
+    margin-left: 16px;
+  }
+}

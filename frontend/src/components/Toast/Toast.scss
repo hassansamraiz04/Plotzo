@@ -1,0 +1,19 @@
+.toast {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+
+  &.success {
+    background: #e8f7ee;
+    color: #146c2e;
+    border: 1px solid #bce7ca;
+  }
+
+  &.error {
+    background: #ffecec;
+    color: #9f1d1d;
+    border: 1px solid #ffcaca;
+  }
+}

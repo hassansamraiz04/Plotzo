@@ -1,24 +1,27 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import {useNotificationStore} from "../../lib/notficationStore"
-
+import { useNotificationStore } from "../../lib/notficationStore";
+import { getUserRole, isSeller } from "../../lib/authz";
 function Navbar() {
   const [open, setOpen] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
+  const isSellerUser = isSeller(currentUser);
+  const roleLabel = getUserRole(currentUser) || "BUYER";
 
-  const fetch = useNotificationStore((state)=> state.fetch);
+  const fetch = useNotificationStore((state) => state.fetch);
   const number = useNotificationStore((state) => state.number);
 
-  if(currentUser) fetch();
+  useEffect(() => {
+    if (currentUser) fetch();
+  }, [currentUser, fetch]);
   
   return (
     <nav>
       <div className="left">
         <a href="/" className="logo">
-        
           <img src="/logo.png" alt="" />
           <span>Plotzo</span>
         </a>
@@ -32,6 +35,14 @@ function Navbar() {
           <div className="user">
             <img src={currentUser.avatar || "/noavatar.jpg"} alt="" />
             <span>{currentUser.username}</span>
+            <span className={`roleBadge ${isSellerUser ? "seller" : "buyer"}`}>
+              {roleLabel}
+            </span>
+            {isSellerUser && (
+              <Link to="/add" className="addPropertyLink">
+                Add Property
+              </Link>
+            )}
             <Link to="/profile" className="profile">
               {number > 0 && <div className="notification">{number}</div>}
               <span>Profile</span>
@@ -39,14 +50,13 @@ function Navbar() {
           </div>
         ) : (
           <>
-            <a href="/login">Sign in</a>
-            <a href="/register" className="register">
+            <Link to="/login">Sign in</Link>
+            <Link to="/register" className="register">
               Sign up
-            </a>
+            </Link>
           </>
         )}
         <div className="menuIcon">
-
           <img
             src="/menu.png"
             alt=""
@@ -58,8 +68,12 @@ function Navbar() {
           <Link to="aboutus">About</Link>
           <Link to="listings">Listings</Link>
           <Link to="contact">Contact</Link>
-          <a href="/">Sign in</a>
-          <a href="/">Sign up</a>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+          <Link to="/disclaimer">Disclaimer</Link>
+          {isSellerUser && <Link to="/add">Add Property</Link>}
+          {!currentUser && <Link to="/login">Sign in</Link>}
+          {!currentUser && <Link to="/register">Sign up</Link>}
         </div>
       </div>
     </nav>
