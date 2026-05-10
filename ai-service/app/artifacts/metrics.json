@@ -1,0 +1,18 @@
+{
+  "dataset": "sklearn.fetch_california_housing",
+  "features": [
+    "MedInc",
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "Population",
+    "AveOccup",
+    "Latitude",
+    "Longitude"
+  ],
+  "mae": 0.30419135555068,
+  "rmse": 0.45822062108701883,
+  "r2": 0.8397705288380785,
+  "n_train": 16512,
+  "n_test": 4128
+}
